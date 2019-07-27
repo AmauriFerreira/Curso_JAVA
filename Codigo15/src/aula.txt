@@ -1,0 +1,162 @@
+a) Sentindo-se solitário em um sábado à noite, o aluno de computação pensa consigo mesmo "Que bom seria se houvesse um jeito de conversar com meus amigos sem precisar sair do computador!" Então ele resolve criar um software chamado Rede de Amigos, onde é possível adicionar seus amigos e conversar com eles. Para isso ele criou uma classe chamada Amigo, com os atributos nome (String), sexo(String), idade(int) e mensagem(String), que armazena a última mensagem enviada para o amigo. Claro que, sendo bom programador, respeitou o encapsulamento e criou os métodos de acesso e os modificadores.
+
+public class Amigo{
+   private String nome, sexo, mensagem;
+   private int idade;
+   
+   // construtor
+   public Amigo(String nome, String sexo, String mensagem, int idade){
+	   this.nome = nome;
+	   this.sexo = sexo;
+	   this.mensagem = mensagem;
+	   this.idade = idade;
+   }
+   
+   public Amigo(String nome, String sexo,int idade){
+	   this.nome = nome;
+	   this.sexo = sexo;
+	   this.idade = idade;
+	   this.mensagem = "Seja bem vindo!";
+   }
+   
+   public Amigo(){
+   }
+
+   public String getNome(){
+      return nome;
+   }
+   
+   public String getSexo(){
+      return sexo;
+   }
+   
+   public String getMensagem(){
+      return mensagem;
+   }
+   
+   public int getIdade(){
+      return idade;
+   }
+   
+   public void setNome(String nome){
+      this.nome = nome;
+   }
+   
+   public void setSexo(String sexo){
+      this.sexo = sexo;
+   }
+   
+   public void setMensagem(String mensagem){
+      //tamanho da mensagem e no maximo 144
+      if(mensagem.length() <= 144){
+         this.mensagem = mensagem;
+      } else {
+         //trunca se for maior
+         this.mensagem = mensagem.substring(0, 144);
+      }
+   }
+   
+   public void setIdade(int idade){
+      this.idade = idade;
+   }
+   
+   public String toString(){
+      return "[Nome: "+nome+"] [Sexo: "+sexo+"] [Idade: "+idade+
+         "]\n[Mensagem: "+mensagem+"]";
+   }   
+}
+
+
+
+
+b) Depois o aluno de computação criou a classe Rede, que contém um ArrayList de amigos. 
+Ele fez um método para adicionar amigos e um para bloquear amigos (remover). 
+
+Fez um método que encontra um amigo pelo nome, retornando sua posição no arraylist (ou -1 se não achar). 
+
+Fez também um método para enviar uma mensagem para o amigo, que encontra o amigo pelo nome e altera seu atributo mensagem (a mensagem pode ter no máximo 144 caracteres; se for maior, o sistema trunca sem avisar nada).
+
+Além de tudo isso, ele fez um método que retorna um vetor com o(s) amigo(s) mais velho(s).
+
+
+
+import java.util.ArrayList;
+
+public class Rede{
+   private ArrayList<Amigo> amigos;
+   
+   public Rede(){
+      amigos = new ArrayList<Amigo>();
+   }
+
+   public void addAmigo(Amigo amigo){
+      amigos.add(amigo);
+   }
+   
+	//metodo busca
+	public int buscarAmigo(String nome){
+		for(int i=0; i<amigos.size(); i++){
+			if(amigos.get(i).getNome().equals(nome)) return i;
+		}
+		return -1;
+	}
+   
+   // metodo remover
+   public void removerAmigo(String nome){
+     int indice = buscarAmigo(nome);
+	 if(indice != -1)this.amigos.remove(indice);
+   }
+   //enviando mensagens
+	public void enviarMensagem(String nome, String mensagem)
+	{
+		amigos.get(buscarAmigo(nome)).setMensagem(mensagem);
+		System.out.println("Nome: "+nome+"\nMensagem: "+amigos.get(buscarAmigo(nome)).getMensagem()+"\n");
+	}
+	
+	public void trocaNome(String nome, String novoNome){
+		amigos.get(buscarAmigo(nome)).setNome(novoNome);
+	}
+	
+   public void listar(){
+	   for(Amigo s: amigos){
+		   System.out.println(s.getNome());
+	   }
+   }
+}
+
+
+------
+
+import javax.swing.JOptionPane;
+
+public class Teste{
+   public static void main(String[] args){
+   Rede redeAmigos = new Rede();
+   
+   //adicione 3 amigos
+   redeAmigos.addAmigo(new Amigo("Joao", "H", "Zé ninguem", 19));
+   redeAmigos.addAmigo(new Amigo("Maria", "M", 19));
+   redeAmigos.addAmigo(new Amigo("Benjamin", "H", 60));
+   
+   //exiba a lista de amigos
+   //redeAmigos.listar();
+   
+   //remova um amigo
+   //System.out.println(redeAmigos.buscarAmigo("Joao"));
+   //System.out.println(redeAmigos.buscarAmigo("Maria"));
+   //System.out.println(redeAmigos.buscarAmigo("Benjamin"));
+   
+   //redeAmigos.removerAmigo("Joao");
+   
+   redeAmigos.listar();
+   
+   //redeAmigos.removerAmigo("Joao");
+   
+   //redeAmigos.enviarMensagem("Maria","Oi Maria!");
+   
+   redeAmigos.trocaNome("Joao", "Joaquim");
+   redeAmigos.listar();
+	}
+}
+
+-----
